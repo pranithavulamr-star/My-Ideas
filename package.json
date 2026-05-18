@@ -1,0 +1,17 @@
+{
+  "name": "nikki",
+  "version": "0.1.0",
+  "description": "Nikitria — gamified life RPG with Niki AI coach (web prototype)",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "express": "^4.19.2"
+  },
+  "license": "MIT"
+}
