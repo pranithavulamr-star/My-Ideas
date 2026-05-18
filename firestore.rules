@@ -1,0 +1,180 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ─── Helper: is the requester authenticated? ───
+    function isAuth() {
+      return request.auth != null;
+    }
+
+    // ─── Helper: does the requester own this user doc? ───
+    function isOwner(userId) {
+      return isAuth() && request.auth.uid == userId;
+    }
+
+    // ─── Users ───
+    match /users/{userId} {
+      allow read, write: if isOwner(userId);
+
+      // Birth profiles (subcollection)
+      match /birthProfiles/{profileId} {
+        allow read, write: if isOwner(userId);
+
+        // Birth charts (sub-subcollection)
+        match /birthCharts/{chartId} {
+          allow read, write: if isOwner(userId);
+        }
+      }
+
+      // Credit transactions
+      match /creditTransactions/{txId} {
+        allow read: if isOwner(userId);
+        allow write: if false; // server-only
+      }
+
+      // Chat sessions
+      match /chatSessions/{sessionId} {
+        allow read, write: if isOwner(userId);
+
+        match /messages/{msgId} {
+          allow read, write: if isOwner(userId);
+        }
+      }
+
+      // Readings
+      match /readings/{readingId} {
+        allow read: if isOwner(userId);
+        allow write: if false; // server-only
+      }
+
+      // Dreams
+      match /dreams/{dreamId} {
+        allow read: if isOwner(userId);
+        allow write: if false; // server-only
+      }
+
+      // Tarot sessions
+      match /tarotSessions/{sessionId} {
+        allow read: if isOwner(userId);
+        allow write: if false; // server-only
+      }
+
+      // Palm readings
+      match /palmReadings/{readingId} {
+        allow read: if isOwner(userId);
+        allow write: if false; // server-only
+      }
+
+      // Past predictions
+      match /pastPredictions/{predId} {
+        allow read: if isOwner(userId);
+        allow write: if false; // server-only
+      }
+    }
+
+    // ─── Dating Profiles ───
+    match /datingProfiles/{profileId} {
+      allow read: if isAuth();
+      allow write: if isAuth() && resource.data.userId == request.auth.uid;
+      allow create: if isAuth();
+
+      match /photos/{photoId} {
+        allow read: if isAuth();
+        allow write: if isAuth();
+      }
+
+      match /promptAnswers/{answerId} {
+        allow read: if isAuth();
+        allow write: if isAuth();
+      }
+    }
+
+    // ─── Dating Infrastructure (server-managed) ───
+    match /swipes/{swipeId} {
+      allow read, write: if false; // server-only
+    }
+
+    match /matches/{matchId} {
+      allow read: if isAuth();
+      allow write: if false; // server-only
+
+      match /conversations/{convId} {
+        allow read: if isAuth();
+
+        match /messages/{msgId} {
+          allow read: if isAuth();
+          allow create: if isAuth();
+        }
+      }
+    }
+
+    match /compatibilityCache/{cacheId} {
+      allow read: if isAuth();
+      allow write: if false; // server-only
+    }
+
+    // ─── Lookup Collections (read-only for clients) ───
+    match /interests/{docId} {
+      allow read: if isAuth();
+      allow write: if false;
+    }
+
+    match /prompts/{docId} {
+      allow read: if isAuth();
+      allow write: if false;
+    }
+
+    // ─── Events ───
+    match /datingEvents/{eventId} {
+      allow read: if isAuth();
+      allow write: if false; // server-only
+
+      match /rsvps/{rsvpId} {
+        allow read: if isAuth();
+        allow write: if isAuth();
+      }
+    }
+
+    // ─── Safety ───
+    match /datingReports/{reportId} {
+      allow create: if isAuth();
+      allow read, update, delete: if false;
+    }
+
+    match /datingBlocks/{blockId} {
+      allow read, write: if isAuth();
+    }
+
+    match /datingVerifications/{verId} {
+      allow read: if isAuth();
+      allow write: if false; // server-only
+    }
+
+    // ─── Subscriptions & Premium ───
+    match /datingSubscriptions/{subId} {
+      allow read: if isAuth();
+      allow write: if false; // server-only
+    }
+
+    match /datingBoosts/{boostId} {
+      allow read: if isAuth();
+      allow write: if false; // server-only
+    }
+
+    match /cosmicStars/{starId} {
+      allow read: if isAuth();
+      allow write: if false; // server-only
+    }
+
+    match /unlockedReports/{reportId} {
+      allow read: if isAuth();
+      allow write: if false; // server-only
+    }
+
+    match /dailyCosmicMatches/{matchId} {
+      allow read: if isAuth();
+      allow write: if false; // server-only
+    }
+  }
+}
