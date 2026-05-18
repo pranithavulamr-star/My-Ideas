@@ -9,13 +9,13 @@ NEXUS ULTIMATE - A full-stack trading dashboard that fuses 23 analytical layers,
 
 Rayena - Rayena is a full stack astrology platform that combines 5000+ years of classical Vedic, Western, and Eastern astrological wisdom with modern AI to deliver real, computationally-grounded predictions with book cited interpretations.
   Unlike sun-sign astrology apps or matrimony portals, Rayena is the first product where:
-    Every reading is computed from real swiss wphemeris-grade planetary data
-    Every AI response is grounded in 100+ classical texts with citations
+    Every reading is computed from real swiss wphemeris-grade planetary data.
+    Every AI response is grounded in 100+ classical texts with citations.
     A 6-dimension cosmic scoring engine deives both compatibility and a built-in dating mode.
 
 
 WDT(Weighted decision Trading) - A majority voting regime conditional weighted decision matrix that:
-  Dynamically adjust strategy weights based on market regime
-  Extracts 28 hand selected strategy variants from the 6 indicators
-  Produces a continuous composite signal in -1 to +1
-  Applies decorrelation penalties to redundant strategy pairs
+  Dynamically adjust strategy weights based on market regime.
+  Extracts 28 hand selected strategy variants from the 6 indicators.
+  Produces a continuous composite signal in -1 to +1.
+  Applies decorrelation penalties to redundant strategy pairs.
