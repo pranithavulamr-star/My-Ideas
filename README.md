@@ -1,187 +1,119 @@
-# Rayena
+# Nikitria
 
-> **Ancient Wisdom × Modern AI × Real-Time Planetary Data**
->
-> A full-stack Vedic astrology platform with AI-grounded predictions, dating
-> mode, and a 100-book classical text knowledge base.
+A gamified life-RPG web app with an AI coach (Niki). Real-life actions earn XP across five stats (Body, Mind, Career, Social, Spirit), Niki generates daily quests in her own voice, and a long progression system layers in classes, weekly arcs, party quests, achievements, a Spark economy, and a paywall.
 
-## ✨ Features
+Web prototype built end-to-end from the Nikitria MVP Build Specification. Backend is a tiny Express server that proxies OpenAI. Frontend is vanilla HTML/CSS/JS — no build step.
 
-### Core Astrology (11)
-- 🧠 **AI Q&A** — ask any life question, get a Vedic chart-grounded answer
-- 📅 **Yearly Prediction Report** — 10-section annual forecast (career, love, health, finances, month-by-month, remedies)
-- ❤️ **Compatibility / Kundli Matching** — Ashtakoot 36-point + Mangal Dosha + AI interpretation
-- 🌙 **Dream Interpretation** — Vedic + Ibn Sirin + Artemidorus, contextualised by current Moon
-- 🃏 **Tarot Reading** — planetary-weighted 78-card deck, two-step (lay → choose) flow
-- ✋ **Palm Reading** — OpenAI Vision + Samudrika Shastra + Cheiro + Benham
-- 🔮 **Past Prediction Validation** — Nadi-style 3 events that verify accuracy before predicting future
-- 🔢 **Numerology** — Pythagorean + Chaldean systems
-- ❓ **Prashna / Horary** — KP 1-249 sub-lord system
-- 🗓️ **Panchang** — Tithi, Nakshatra, Yoga, Karana, Vaara
-- 🛎️ **Daily Horoscope** — personalised by chart
+## Features
 
-### Dating Mode (12)
-- Cosmic compatibility scoring (6-dimension 0-100 algorithm)
-- Astrology-native discovery feed with swipe + match
-- AI planetary icebreakers (1 credit per generation)
-- Vedic Chemistry Report (15 credits, 5-page essay)
-- Composite chart analysis (20 credits)
-- Past-life karmic connection (25 credits)
-- Cosmic Weather daily love forecast
-- Muhurta for first dates
-- Prashna "Should I message?" (5 credits)
-- Cosmic Mixers IRL events
-- 4-tier subscriptions (Free / Cosmic ₹199 / Stellar ₹499 / Divine ₹999)
+- **Onboarding** — 7-step conversational flow with Niki AI reflection
+- **Niki chat** — persona guardrails, crisis pipeline, rate-limited free tier, explicit memory capture
+- **Daily quests** — AI-generated based on character + recent activity, 1/2/3 slots by level
+- **Weekly quests** — AI-generated 7-day narrative arcs (unlock at level 15)
+- **Story arcs** — long 4–12 week AI-designed plans toward a stated goal
+- **Character sheet** — 5 stats with 30-day sparklines, drill-in, titles, season banner
+- **XP / leveling** — 50-level curve, streak multiplier (×1.0→×1.5), class bonuses (+15%), level-up takeover
+- **Streaks + freezes** — auto-freeze on miss, Return Quest after broken streak
+- **Habits** — up to 6, with stat mapping and 3 size tiers
+- **Journal** — moods, Niki writing prompts, async reflection, 200-word XP threshold
+- **Friends / party / feed / leaderboards** — invite, party quests, weekly + global (opt-in)
+- **Achievements** — 80 achievements across 4 tiers, Spark rewards
+- **Shop** — 60+ cosmetic items + utilities, Spark currency, gate logic, equip
+- **Notifications** — in-app center + browser Notification API + evening streak reminder
+- **Settings + privacy** — tone picker, data export (JSON + journal markdown), Niki memory viewer, reset
+- **Nikitria+ paywall** — demo upgrade flow with comparison + monthly/yearly plans
+- **Classes / Prestige / Mastery / Seasons** — full progression layer
 
-### Book-Grounded AI
-Every AI response is grounded in real text from a **100+ book** library covering:
-**Brihat Parashara Hora Shastra • Brihat Jataka • Phaladeepika • Saravali • Uttara Kalamrita • Lal Kitab • Cheiro's Book of Numbers • Ibn Sirin's Dictionary of Dreams • Samudrika Shastra • Muhurta Chintamani • Prasna Marga • Jataka Chandrika • Stree Jataka • Mantra Mahodadhi • Pictorial Key to the Tarot • Book of Thoth** — and many more.
+## Tech
 
-Every reading ends with a "📚 Books Consulted from Rayena Library" citations list.
+- **Backend** — Node.js + Express, proxies OpenAI Chat Completions
+- **Frontend** — vanilla HTML/CSS/JS, no framework, no build step
+- **Persistence** — `localStorage` (single-user web prototype)
+- **AI** — OpenAI `gpt-4o-mini` for all Niki tiers (swap models in `server.js → MODELS`)
 
-## 🏗️ Tech Stack
-
-| Layer | Tech |
-|-------|------|
-| **Frontend** | Next.js 14 (App Router), Tailwind CSS, Zustand, TypeScript |
-| **Backend** | FastAPI, Python 3.11+, SQLAlchemy async (or Firestore) |
-| **Database** | SQLite (local dev) or Firebase Firestore (production) |
-| **Auth** | Firebase Auth (or local JWT for dev) |
-| **AI** | OpenAI GPT-4o (text) + GPT-4o Vision (palm reading) |
-| **Astro Engine** | pyswisseph + custom Vedic modules (Dasha, Yogas, Shadbala, Ashtakavarga, Navamsa) |
-| **RAG** | In-memory keyword search over book knowledge base |
-
-## 📁 Structure
-
-```
-rayena/
-├── backend/                      # FastAPI app (port 8000)
-│   ├── main.py                   # App entry
-│   ├── routers/                  # 20+ API routers (auth, charts, readings, dating, ...)
-│   ├── models/                   # SQLAlchemy models
-│   ├── services/
-│   │   ├── astro/                # Swiss Ephemeris wrapper, Dasha, Yogas, Panchang, Muhurta
-│   │   ├── ai/                   # OpenAI client, RAG, 20 prompt templates, book knowledge
-│   │   ├── dating/               # Compatibility engine, discovery, AI features
-│   │   ├── tarot/                # 78-card deck, planetary weighting, spreads
-│   │   ├── palm/                 # Vision API + book-grounded interpretation
-│   │   └── numerology/           # Pythagorean + Chaldean
-│   ├── data/                     # Seed data (interests, prompts)
-│   ├── firebase_config.py        # Firebase Admin SDK init
-│   ├── firebase_db.py            # Firestore helper layer
-│   └── requirements.txt
-│
-├── frontend/                     # Next.js 14 (port 3000)
-│   ├── src/
-│   │   ├── app/                  # Pages (dashboard, dating/, tarot, palm, ...)
-│   │   ├── components/           # React components (charts, dating cards, ...)
-│   │   └── lib/                  # API client, Zustand stores, Firebase init
-│   └── package.json
-│
-├── firebase.json                 # Firebase Hosting + Firestore config
-├── firestore.rules               # Security rules
-├── firestore.indexes.json
-├── .env.example                  # Backend env template
-└── README.md
-```
-
-## 🚀 Setup
+## Setup
 
 ### Prerequisites
-- **Python 3.11+**
-- **Node.js 18+** and **npm**
-- An **OpenAI API key** (https://platform.openai.com/api-keys)
-- A **Firebase project** (optional — for production; SQLite works for dev)
+- Node.js 18+ ([nodejs.org](https://nodejs.org))
+- An OpenAI API key — get one at https://platform.openai.com/api-keys
 
-### 1. Clone
+### Install & run
+
 ```bash
-git clone https://github.com/<you>/rayena.git
-cd rayena
-```
-
-### 2. Backend
-```bash
-cd backend
-
-# Create virtual environment
-python -m venv .venv
-.venv\Scripts\activate           # Windows
-# source .venv/bin/activate      # macOS / Linux
-
-# Install dependencies
-pip install -r requirements.txt
-
-# Configure environment
-cd ..
-cp .env.example .env
-# Edit .env and add your OPENAI_API_KEY + JWT_SECRET
-
-# Run
-cd backend
-python main.py
-# → http://localhost:8000  (API docs at /docs)
-```
-
-### 3. Frontend
-```bash
-cd frontend
-
-# Install dependencies
+git clone https://github.com/<your-username>/nikki.git
+cd nikki
 npm install
-
-# Configure environment (only needed if using Firebase Auth)
-cp .env.local.example .env.local
-# Edit .env.local with your Firebase web app config
-
-# Run
-npm run dev
-# → http://localhost:3000
+cp .env.example .env
+# Edit .env and paste your OpenAI key
+npm start
 ```
 
-### 4. Firebase (Optional, Production)
-If you want to use Firebase Auth + Firestore instead of local SQLite:
+Open http://localhost:3000.
 
-1. Create a project at https://console.firebase.google.com
-2. Enable **Authentication → Email/Password** and **Firestore Database**
-3. Download a **service account key** (Settings → Service Accounts → Generate New Private Key)
-4. Save it as `rayena/serviceAccountKey.json` (already gitignored)
-5. Copy the Firebase web app config into `frontend/.env.local`
-6. Set `FIREBASE_PROJECT_ID` and `FIREBASE_STORAGE_BUCKET` in `.env`
+### Environment variables
 
-Deploy hosting + rules:
-```bash
-npm install -g firebase-tools
-firebase login
-firebase deploy
+| Var | Required | Default | Notes |
+|---|---|---|---|
+| `OPENAI_API_KEY` | yes | — | Your OpenAI secret key (server-side only — never exposed to the client) |
+| `PORT` | no | `3000` | Port the server listens on |
+
+## Project layout
+
+```
+nikki/
+├── server.js          # Express server + OpenAI proxy + Niki persona/guardrails
+├── package.json
+├── .env.example       # Template — copy to .env and fill in
+├── .gitignore         # Excludes .env, node_modules, etc
+├── README.md
+└── public/
+    ├── index.html
+    ├── styles.css
+    ├── content.js     # Static data: 80 achievements, 60+ shop items, classes, seasons
+    └── app.js         # All client logic — state, tabs, XP engine, AI calls, UI
 ```
 
-## 🧪 API Documentation
+## API endpoints
 
-Once the backend is running, visit:
-- **Swagger UI:** http://localhost:8000/docs
-- **ReDoc:** http://localhost:8000/redoc
+All endpoints are POST and return JSON. Body is `application/json`.
 
-Total endpoints: **70+** across auth, profiles, charts, readings, tarot, palm, dreams, compatibility, numerology, prashna, and 6 dating routers.
+| Endpoint | Purpose |
+|---|---|
+| `/api/niki/chat` | Multi-turn chat with Niki (with crisis short-circuit) |
+| `/api/niki/onboarding` | Process onboarding answers; returns reflection + stat weights + first quest |
+| `/api/niki/quests` | Generate today's daily quests for the character |
+| `/api/niki/weekly` | Generate a 7-day narrative weekly quest |
+| `/api/niki/story` | Design a 4–12 week story arc toward a goal |
+| `/api/niki/party-quest` | Generate a 7-day party quest |
+| `/api/niki/reflect` | Async 2-sentence Niki reflection on a journal entry |
+| `/api/niki/class-advice` | Recommend a class at level 10 based on stats |
+| `/api/niki/return-quest` | Generate a recovery quest after a broken streak |
 
-## 🔐 Security Notes
+## Niki persona
 
-- **`.env` and `serviceAccountKey.json` are gitignored** — never commit secrets
-- Use `.env.example` and `.env.local.example` as templates only
-- For production, prefer **environment variables** or a secret manager (GCP Secret Manager, AWS SM, etc.) over files
-- Rotate the JWT secret and API keys before public deployment
-- Review `firestore.rules` before opening Firestore to public traffic
+Niki is a coach and narrator — explicitly NOT a therapist, friend, romantic partner, or general chatbot. Hard guardrails in the system prompt enforce:
+- Redirect on romantic/sexual steering
+- Decline medical/legal/financial advice with a "talk to a professional" line
+- Crisis keyword short-circuit returns a verbatim helpline message (US 988, UK Samaritans 116 123, India iCall 9152987821)
 
-## 📜 License
+See `server.js → NIKI_SYSTEM_BASE` for the full system prompt.
 
-This project is for educational and personal use. Classical text excerpts in
-the book knowledge base are from public domain editions (Santhanam, Iyer, etc.).
-The Rayena codebase itself is **not currently licensed for redistribution** —
-add a LICENSE file before publishing if you want to open-source it.
+## Limitations
 
-## 🙏 Credits
+This is a web prototype. The full spec ships on React Native / Expo / Supabase / RevenueCat with native push, Apple Health, and real multi-user. Specifically:
 
-Built on the shoulders of millennia of astrological tradition. Classical texts:
-**Sage Parashara, Varahamihira, Kalyana Varma, Mantreshwara, Kalidasa, Cheiro,
-William Benham, Ibn Sirin, Artemidorus**, and dozens more.
+- No real backend — `localStorage` only. Friends, party, leaderboard use simulated peers.
+- No Apple Health / Google Fit (native-only APIs)
+- No real push notifications on iOS PWAs (uses browser `Notification` API only)
+- No real IAP — the Nikitria+ paywall is a demo toggle (in production this routes through RevenueCat)
+- No real auth — single-user per browser
 
-Modern stack: **Next.js, FastAPI, OpenAI, Firebase, pyswisseph, Swiss Ephemeris**.
+## Security
+
+- `OPENAI_API_KEY` lives server-side only; the client never sees it
+- `.env` is gitignored. If you ever accidentally commit a key, rotate it immediately at https://platform.openai.com/api-keys
+- Niki's content moderation pipeline is minimal in this prototype (crisis keyword regex only) — the spec calls for OpenAI Moderation API in production
+
+## License
+
+Choose one before publishing (MIT is a sensible default).
