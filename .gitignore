@@ -1,0 +1,8 @@
+node_modules/
+.env
+backend/nexus.db
+backend/.venv/
+backend/__pycache__/
+backend/**/__pycache__/
+dist/
+.claude/
